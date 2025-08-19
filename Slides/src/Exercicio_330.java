@@ -8,13 +8,12 @@ public class Exercicio_330 {
         System.out.print("Digite um número inteiro: ");
         int a = sc.nextInt();
 
-        int soma = 0;
+        double soma = 0;
         for (int i = 0; i < 40; i++) {
-            soma += (7 * a) / 3 * (2 * i + 1) ;
+            soma += (7.0 * a / 3) * (2 * i + 1);
         }
-        System.out.println(soma);
+
+        System.out.println("Resultado da soma: " + soma);
         sc.close();
-
     }
-
 }

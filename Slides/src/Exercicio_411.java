@@ -7,12 +7,18 @@ public class Exercicio_411 {
 
         System.out.println("Elaborar um programa que permita a entrada de um número inteiro entre 1 e 9999 e o escreva por extenso");
 
-        String[] unidades = {" ","um","dois","três","quatro","cinco","seis","sete","oito","nove"};
+        String[] unidades = {"","um","dois","três","quatro","cinco","seis","sete","oito","nove"};
         String[] dezenasDez = {"dez","onze","doze","treze","quatorze","quinze","dezesseis","dezessete","dezoito","dezenove"};
-        String[] dezenas = {" ","vinte","trinta","quarenta","cinquenta","sessenta","setenta","oitenta","noventa", "NULL"};
+        String[] dezenas = {"","vinte","trinta","quarenta","cinquenta","sessenta","setenta","oitenta","noventa", "NULL"};
         String[] centenas = {"cento","duzentos","trezentos","quatrocentos","quinhentos","seiscentos","setecentos","oitocentos","novecentos"};
 
         int N = sc.nextInt();
+
+        if (N < 1 || N > 9999) {
+            System.out.println("Número fora do intervalo permitido!");
+            sc.close();
+            return;
+        }
 
         String Str = String.valueOf(N);
         int[] vet;
