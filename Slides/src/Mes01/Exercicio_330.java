@@ -1,3 +1,5 @@
+package Mes01;
+
 import java.util.Scanner;
 
 public class Exercicio_330 {
