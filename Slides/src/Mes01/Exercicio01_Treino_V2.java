@@ -2,7 +2,7 @@ package Mes01;
 
 import java.util.Scanner;
 
-public class Exercicio_Treino1_V1 {
+public class Exercicio01_Treino_V2 {
     public static void main(String[] args) {
 
         Scanner sc = new Scanner(System.in);
@@ -23,31 +23,18 @@ public class Exercicio_Treino1_V1 {
             return;
         }
 
-        String Str = String.valueOf(N);
-        int[] vet;
-        vet = new int[Str.length()];
+        String extenso = "";
 
-        for (int i = 0; i < Str.length(); i++) {
-            char digito = Str.charAt(i);
-            vet[i] = digito - '0';
-            System.out.println(vet[i]);
-        }
-
-        if (N < 10) {
-            System.out.println(unidades[N]);
-        }
-        else if (N < 20) {
-            System.out.println(dezenasDez[N - 10]);
-        }
-        else if (N < 100) {
-            System.out.println(dezenas[vet[0]] + " " + unidades[vet[1]]);
-        }
-        else if (N < 1000) {
-            System.out.println(centenas[vet[0]] +" e " + dezenas[vet[1] - 1] + " " + unidades[vet[2]]);
-        }
-        else if (N < 10000) {
-            System.out.println(unidades[vet[0]] + " mil " + centenas[vet[1] - 1] + " e " + dezenas[vet[2] - 1] + " " + unidades[vet[3]]);
+        if ( N < 10) {
+            extenso = unidades[N];
+        } else if ( N < 20) {
+            extenso = dezenasDez[N - 10];
+        } else if ( N < 100 ) {
+            extenso = dezenas[N];
         }
 
+
+        System.out.println("Por extenso: " + extenso);
+        sc.close();
     }
 }

@@ -2,7 +2,7 @@ package Mes01;
 
 import java.util.Scanner;
 
-public class Exercicio_330 {
+public class Exercicio330 {
     public static void main(String[] args){
 
         Scanner sc = new Scanner(System.in);

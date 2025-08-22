@@ -2,10 +2,11 @@ package Mes01;
 
 import java.util.Scanner;
 
-public class Exercicio_Treino2_V1 {
+public class Exercicio02_PreTreino {
     public static void main(String[] args) {
-
         Scanner sc = new Scanner(System.in);
+
+        System.out.println("Exibir as (n) linhas do triângulo de pascal");
 
         System.out.println("Número de linhas: ");
         int cont = 1, valor;

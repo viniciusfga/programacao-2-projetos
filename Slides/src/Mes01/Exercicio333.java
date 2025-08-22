@@ -1,6 +1,6 @@
 package Mes01;
 
-public class Exercicio_333 {
+public class Exercicio333 {
     public static void main(String[] args) {
 
         // Fórmula de Machin
