@@ -1,6 +1,14 @@
 package Iniciante;
 import java.util.Scanner;
-
+/*
+Escreva um programa que leia três valores com ponto flutuante de dupla precisão: A, B e C.
+Em seguida, calcule e mostre:
+a) a área do triângulo
+b) a área do círculo
+c) a área do trapézio
+d) a área do quadrado
+e) a área do retângulo
+ */
 public class Bee_1012 {
     public static void main(String[] args){
 
