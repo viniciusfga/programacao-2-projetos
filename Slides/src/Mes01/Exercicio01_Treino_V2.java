@@ -15,7 +15,8 @@ public class Exercicio01_Treino_V2 {
         String[] centenas = {"", "cem", "duzentos", "trezentos", "quatrocentos", "quinhentos", "seiscentos", "setecentos", "oitocentos", "novecentos"};
 
         System.out.println("Digite um número inteiro entre 1 e 9999:");
-        int N = sc.nextInt();
+        //int N = sc.nextInt();
+        int N = 9000;
 
         if (N < 1 || N > 9999) {
             System.out.println("Número fora do intervalo permitido!");
@@ -25,14 +26,10 @@ public class Exercicio01_Treino_V2 {
 
         String extenso = "";
 
-        if ( N < 10) {
-            extenso = unidades[N];
-        } else if ( N < 20) {
-            extenso = dezenasDez[N - 10];
-        } else if ( N < 100 ) {
-            extenso = dezenas[N];
+        if ( N >= 1000) {
+            int milhar = N / 1000;
+            extenso += (milhar == 1 ? "mil" : unidades[milhar] + "mil");
         }
-
 
         System.out.println("Por extenso: " + extenso);
         sc.close();

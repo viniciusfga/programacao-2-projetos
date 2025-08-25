@@ -12,6 +12,7 @@ public class Exercicio02_PreTreino {
         int cont = 1, valor;
 
         int LINHAS = sc.nextInt();
+        LINHAS --;
 
         for (int i = 1; i <= LINHAS; i++) {
 
