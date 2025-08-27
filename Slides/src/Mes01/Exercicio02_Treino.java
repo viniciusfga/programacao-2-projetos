@@ -11,7 +11,7 @@ public class Exercicio02_Treino {
 
         String resultado = "(a + b)^" + n + " = ";
 
-        long coeficiente = 1;
+        int coeficiente = 1;
 
         for (int i = 0; i <= n; i++) {
             if (i > 0) {
