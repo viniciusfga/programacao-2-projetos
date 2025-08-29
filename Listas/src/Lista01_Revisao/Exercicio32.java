@@ -8,7 +8,6 @@ public class Exercicio32 {
 
         System.out.println("Criptografia simples rotacionando letras.");
 
-        // MÉTODO Cifra de César
         System.out.print("Digite a mensagem: ");
         String mensagem = sc.nextLine();
 
@@ -21,10 +20,10 @@ public class Exercicio32 {
             char c = mensagem.charAt(i);
 
             if (Character.isUpperCase(c)) {
-                resultado += (char)(((c - 'A' - shift) % 26) + 'A');
+                resultado += (char) ((('A' - shift + 26) % 26) + 'A');
             } else if (Character.isLowerCase(c)) {
-                resultado += (char)(((c - 'a' - shift) % 26) + 'a');
-            } else {
+                resultado += (char) ((('a' - shift + 26) % 26) + 'a');
+            } else{
                 resultado += c;
             }
         }
