@@ -34,27 +34,35 @@ public class Exercicio18 {
         }
     }
 
-    public static byte[][] descompactarImagem(String codico) {
+    public static byte[][] descompactarImagem(String codigo, int n) {
+        byte[][] imagem = new byte[n][n];
+        int linha = 0, coluna = 0;
+        int i = 0;
 
-        int length = Character.getNumericValue(codico.charAt(0));
+        while (i < codigo.length()) {
+            // pega número (pode ser >9)
+            StringBuilder sb = new StringBuilder();
+            while (i < codigo.length() && Character.isDigit(codigo.charAt(i))) {
+                sb.append(codigo.charAt(i));
+                i++;
+            }
+            int qtd = Integer.parseInt(sb.toString());
 
-        byte[][] imagem = new byte[length][length];
+            // pega tipo (P=0, B=1)
+            char tipo = codigo.charAt(i);
+            i++;
 
-        for (int i = 0; i < imagem.length; i++) {
-            for (int j = 0; j < imagem[i].length; j++) {
-                for (int k = 0; k < codico.length(); k++) {
-                    char caractere = codico.charAt(k);
+            byte valor = (tipo == 'P') ? (byte) 0 : (byte) 1;
 
-                    if (Character.isDigit(caractere) && codico.charAt(k + 1) == 'P') {
-                        imagem[i][j] = 0;
-                    }
-                    if (Character.isDigit(caractere) && codico.charAt(k + 1) == 'B') {
-                        imagem[i][j] = 1;
-                    }
+            for (int k = 0; k < qtd; k++) {
+                imagem[linha][coluna] = valor;
+                coluna++;
+                if (coluna == n) {
+                    coluna = 0;
+                    linha++;
                 }
             }
         }
-
         return imagem;
     }
 
@@ -74,7 +82,8 @@ public class Exercicio18 {
         System.out.println("Escolha uma das opções: ");
         System.out.println(" 0 - COMPACTAR");
         System.out.println(" 1 - DESCOMPACTAR");
-        int opcao = sc.nextByte();
+        int opcao = sc.nextInt();
+        sc.nextLine();
 
         switch (opcao) {
             case 0:
@@ -90,17 +99,17 @@ public class Exercicio18 {
                 };
                 compactarImagem(imagem);
                 break;
+
             case 1:
-                String codicoImagem = sc.nextLine();
-                int confirmar = 0;
-                System.out.println("Digite 1 para confimar");
-                confirmar = sc.nextInt();
-                if (confirmar == 1) {
-                    descompactarImagem(codicoImagem);
-                }
+                System.out.print("Digite o código compactado: ");
+                String codigoImagem = sc.nextLine();
+                System.out.print("Digite o tamanho da matriz (ex: 8): ");
+                int tamanho = sc.nextInt();
+
+                byte[][] imagemDecodificada = descompactarImagem(codigoImagem, tamanho);
+                imprimirMatriz(imagemDecodificada);
                 break;
         }
         sc.close();
-
     }
 }
