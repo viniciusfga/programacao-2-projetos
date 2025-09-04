@@ -20,7 +20,7 @@ O projeto aborda os seguintes tópicos de programação:
 -  **Operadores de entrada e saída**
 -  **Vetores e matrizes**
 -  **Strings**
--  **Estrutura de dados heterogênea**
+-  **Estruturas de dados heterogênea**
 -  **Métodos e passagem de parâmetros**
 -  **Recursividade**
 -  **Arquivos**
