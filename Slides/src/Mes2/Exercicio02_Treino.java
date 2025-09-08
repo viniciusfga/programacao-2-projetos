@@ -6,35 +6,28 @@ import java.util.Scanner;
 public class Exercicio02_Treino {
 
     public static String normalizar(String s) {
-
-        s = s.trim().toLowerCase();
-        s = Normalizer.normalize(s, Normalizer.Form.NFD);
-        s = s.replaceAll("[^\\p{ASCII}]", "");
-        return s;
+        return Normalizer.normalize(s.trim().toLowerCase(), Normalizer.Form.NFD)
+                .replaceAll("[^\\p{ASCII}]", "");
     }
-    public static void main(String[] args) {
 
+    public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
 
-        /*
-        Receba a busca do usuário
-        Remova espaços extras
-        Ignore maiúsculas/minúsculas
-        Normalize acentos
-        Retorne os nomes mais próximos ordenados por similaridade
-         */
+        String[] palavras = {
+                "João Francisco da Silva",
+                "Joao Francisko da Silva",
+                "João Silva",
+                "Maria Silva"
+        };
 
-        String[] palavra = {"João Francisco da Silva", "Joao Francisko da Silva", "João Silva", "Maria Silva"};
+        String busca = "joao"; //input.nextLine();
 
-        String busca = "joao franscisco da silva"; //input.nextLine();
-        busca = busca.trim();
+        busca = normalizar(busca);
 
-        for (int i = 0; i < palavra.length; i++) {
-
-            if (busca.equalsIgnoreCase(palavra[i].trim())) {
-                System.out.println(palavra[i]);
+        for (int i = 0; i < palavras.length; i++) {
+            if (busca.equals(normalizar(palavras[i]))) {
+                System.out.println(palavras[i]);
             }
         }
-
     }
 }
