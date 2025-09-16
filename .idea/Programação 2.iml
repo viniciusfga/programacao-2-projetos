@@ -6,6 +6,7 @@
       <sourceFolder url="file://$MODULE_DIR$/Listas/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Slides/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/BeeCrowd/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Maratonas/SBC/primeirafase" isTestSource="false" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
