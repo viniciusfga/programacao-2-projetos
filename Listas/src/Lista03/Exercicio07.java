@@ -5,7 +5,6 @@ public class Exercicio07 {
     /*
     Remova palavras duplicadas consecutivas em um texto (ex.: "oi oi tudo bem" -> "oi tudo bem")
      */
-
     static String removerDuplicados(String str) {
         String resultado = "";
 
