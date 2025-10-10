@@ -73,6 +73,7 @@ public class MatrizFinanceira {
                 somaReceita += receitas[i][j];
             }
 
+
             double saldo = somaReceita - somaDespesa;
             System.out.printf("%s --> Receitas: %.2f | Despesas: %.2f | Saldo: %.2f%n",
                     MESES[i], somaReceita, somaDespesa, saldo);

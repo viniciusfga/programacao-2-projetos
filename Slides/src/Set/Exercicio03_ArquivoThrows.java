@@ -1,4 +1,4 @@
-package Mes2;
+package Set;
 
 import javax.swing.*;
 import java.io.FileWriter;

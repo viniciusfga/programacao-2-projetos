@@ -1,4 +1,4 @@
-    package Mes1;
+    package Ago;
 
     public class Exercicio01_MatrizZigZag {
         public static void main(String[] args) {

@@ -1,4 +1,4 @@
-package Mes2;
+package Set;
 
 import java.util.InputMismatchException;
 import java.util.Scanner;

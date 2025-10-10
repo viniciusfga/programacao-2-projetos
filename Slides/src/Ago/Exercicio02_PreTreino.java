@@ -1,4 +1,4 @@
-package Mes1;
+package Ago;
 
 import java.util.Scanner;
 

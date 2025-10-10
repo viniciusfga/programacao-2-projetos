@@ -1,4 +1,4 @@
-package Mes2;
+package Set;
 
 import java.text.Normalizer;
 import java.util.Scanner;
