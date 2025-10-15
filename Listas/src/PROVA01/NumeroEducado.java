@@ -3,7 +3,7 @@ package PROVA01;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-public class Exercicio02 {
+class NumeroEducado {
 
     public static String verificaNumeroEducado (int numero){
         for (int start = 1; start < numero ; start++) {

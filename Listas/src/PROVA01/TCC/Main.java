@@ -1,4 +1,4 @@
-package PROVA01.QUESTAO_01;
+package PROVA01.TCC;
 
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -6,7 +6,7 @@ import java.util.Scanner;
 public class Main {
 
     // Método para ler cadastro de TCC
-    static MatrizTCCs.TCC lerCadastro(Scanner sc) {
+    static TCCs.TCC lerCadastro(Scanner sc) {
         sc.nextLine(); // limpa buffer
         System.out.print("Número da avaliação: ");
         int numeroAvaliacao = sc.nextInt();
@@ -20,7 +20,7 @@ public class Main {
         System.out.print("Nome do Orientador: ");
         String orientador = sc.nextLine();
 
-        return new MatrizTCCs.TCC(numeroAvaliacao, nome, alunoA, alunoB, orientador);
+        return new TCCs.TCC(numeroAvaliacao, nome, alunoA, alunoB, orientador);
     }
 
     // Submenu de gerenciamento
@@ -32,18 +32,18 @@ public class Main {
         System.out.print("Escolha: ");
     }
 
-    static void gerenciar(MatrizTCCs matriz, Scanner sc) {
+    static void gerenciar(TCCs matriz, Scanner sc) {
         mostrarSubmenu();
         int op = sc.nextInt();
         sc.nextLine(); // limpa buffer
 
         switch (op) {
             case 1 -> {
-                MatrizTCCs.TCC tcc = lerCadastro(sc);
+                TCCs.TCC tcc = lerCadastro(sc);
                 matriz.cadastrarTCC(tcc.numeroAvaliacao, tcc.nome, tcc.alunoA, tcc.alunoB, tcc.orientador);
             }
             case 2 -> {
-                MatrizTCCs.TCC tcc = lerCadastro(sc);
+                TCCs.TCC tcc = lerCadastro(sc);
                 matriz.alterarTCC(tcc.numeroAvaliacao, tcc.nome, tcc.alunoA, tcc.alunoB, tcc.orientador);
             }
             case 3 -> {
@@ -66,13 +66,15 @@ public class Main {
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        MatrizTCCs matriz = new MatrizTCCs();
+        TCCs matriz = new TCCs();
         boolean executando = true;
 
         while (executando) {
-            mostrarMenu();
             try {
+                mostrarMenu();
                 int opcao = sc.nextInt();
+                sc.nextLine();
+
                 switch (opcao) {
                     case 1 -> gerenciar(matriz, sc);
                     case 2 -> matriz.listarTCCs();

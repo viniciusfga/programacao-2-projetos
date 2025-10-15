@@ -1,4 +1,4 @@
-package PROVA01.QUESTAO_01;
+package PROVA01.TCC;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-public class MatrizTCCs {
+public class TCCs {
 
     public static class TCC {
         int numeroAvaliacao;
@@ -34,7 +34,7 @@ public class MatrizTCCs {
 
     private final List<TCC> listaTCCs;
 
-    public MatrizTCCs() {
+    public TCCs() {
         listaTCCs = new ArrayList<>();
     }
 
