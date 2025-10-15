@@ -1,4 +1,8 @@
 package PROVA01.Conselho;
 
-public class TipoProblema {
+public enum TipoProblema {
+    DISCIPLINAR,
+    BAIXO_RENDIMENTO,
+    FALTAS_EXCESSIVAS,
+    OUTROS
 }
