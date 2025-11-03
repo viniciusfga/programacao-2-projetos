@@ -10,6 +10,7 @@
       <sourceFolder url="file://$MODULE_DIR$/Maratonas/BigO" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Maratonas/SBC" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Maratonas/Recursividade" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Projetos/src" isTestSource="false" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

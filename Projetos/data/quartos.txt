@@ -1,0 +1,11 @@
+1;Simples;120.0;true
+2;Simples;120.0;true
+3;Simples;120.0;true
+4;Luxo;200.0;true
+5;Luxo;200.0;true
+6;Luxo;200.0;true
+7;Suíte;350.0;true
+8;Suíte;350.0;true
+9;Suíte;350.0;true
+10;Suíte;350.0;true
+
