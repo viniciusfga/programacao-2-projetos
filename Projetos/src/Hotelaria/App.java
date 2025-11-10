@@ -5,7 +5,7 @@ import Hotelaria.services.QuartoService;
 import Hotelaria.services.ReservaService;
 import Hotelaria.utils.Utils;
 
-public class Main {
+public class App {
     public static void main(String[] args) {
 
         HospedeService hospedeService = new HospedeService();

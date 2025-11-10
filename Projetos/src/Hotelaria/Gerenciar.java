@@ -20,9 +20,18 @@ public class Gerenciar {
         this.reservaService = reservaService;
     }
 
+    public Gerenciar() {
+
+    }
+
     // --- Gerenciar Hóspedes ---
     public void gerenciarHospedes() {
-        int escolha = Utils.lerInt("\n1-Cadastrar\n2-Listar\n3-Remover\nEscolha: ");
+        int escolha = Utils.lerInt("""
+                \n=== Gerenciar Hóspedes ===
+                1 - Cadastrar
+                2 - Listar
+                3 - Remover
+                Escolha: """);
 
         switch (escolha) {
             case 1 -> {
