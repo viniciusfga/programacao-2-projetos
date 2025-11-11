@@ -1,2 +1,1 @@
 0;Pedro Henrique Alves	;351.456.789-01	;DF 01.092.837-1	;61993210987	;pedro.alves@estudante.ifgoiano.edu.br
-1;Lúcia Regina Siqueira	;210.987.654-32	;MG 15.678.901-5	;34981765432	;lucia.siqueira@estudante.ifgoiano.edu.br

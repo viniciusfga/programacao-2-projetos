@@ -21,4 +21,9 @@ public class Utils {
             }
         }
     }
+
+    public static double lerDouble(String mensagem) {
+        System.out.println(mensagem);
+        return Double.parseDouble(sc.nextLine());
+    }
 }

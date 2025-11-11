@@ -76,7 +76,7 @@ public class HospedeService {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(arquivoHospedes, true))) {
             bw.write(id + ";" + nome + ";" + cpf + ";" + rg + ";" + celular + ";" + email);
             bw.newLine();
-            System.out.println("\n✅ Hóspede cadastrado com sucesso!");
+            System.out.println("\nHóspede cadastrado com sucesso!");
             gravaId(id + 1);
         } catch (IOException e) {
             System.out.println("Erro ao gravar hóspede: " + e.getMessage());
