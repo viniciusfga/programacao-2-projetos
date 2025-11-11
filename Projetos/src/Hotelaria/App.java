@@ -1,41 +1,30 @@
 package Hotelaria;
 
-import Hotelaria.services.HospedeService;
-import Hotelaria.services.QuartoService;
-import Hotelaria.services.ReservaService;
-import Hotelaria.utils.Utils;
+import java.util.InputMismatchException;
 
 public class App {
     public static void main(String[] args) {
 
-        HospedeService hospedeService = new HospedeService();
-        QuartoService quartoService = new QuartoService();
-        ReservaService reservaService = new ReservaService();
+        Gerenciar gerenciar = new Gerenciar();
 
-        // CARREGAR DADOS EXISTENTES
-        hospedeService.carregarArquivo();
-        quartoService.carregarArquivo();
-        reservaService.carregarArquivo(hospedeService, quartoService);
-
-        Gerenciar gerenciar = new Gerenciar(hospedeService, quartoService, reservaService);
-
-        int opcao;
+        int opcao = 0;
         do {
             System.out.println("\n=== Sistema Hostelaria ===");
             System.out.println("1. Gerenciar hóspedes");
-            System.out.println("2. Gerenciar quartos");
-            System.out.println("3. Gerenciar reservas");
-            System.out.println("4. Sair");
+            System.out.println("2. Sair");
 
-            opcao = Utils.lerInt("Escolha uma opção: ");
+            try {
+                opcao = Utils.lerInt("Escolha uma opção: ");
 
-            switch (opcao) {
-                case 1 -> gerenciar.gerenciarHospedes();
-                case 2 -> gerenciar.gerenciarQuartos();
-                case 3 -> gerenciar.gerenciarReservas();
-                case 4 -> System.out.println("Saindo...");
-                default -> System.out.println("Opção inválida!");
+                switch (opcao) {
+                    case 1 -> gerenciar.gerenciarHospedes();
+                    case 2 -> System.out.println("\nEncerrando o sistema...");
+                    default -> System.out.println("Opção inválida. Tente novamente.");
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("Erro: digite um número válido");
             }
-        } while (opcao != 4);
+        } while (opcao != 2);
+
     }
 }

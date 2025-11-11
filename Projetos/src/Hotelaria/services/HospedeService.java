@@ -1,115 +1,165 @@
 package Hotelaria.services;
 
-import Hotelaria.models.Hospede;
-
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Scanner;
+
+import Hotelaria.models.Hospede;
+import Hotelaria.Utils;
 
 public class HospedeService {
 
-    private List<Hospede> hospedes = new ArrayList<>();
-    private final String arquivo = "Projetos/data/hospedes.txt"; // arquivo no projeto
+    // CAMINHO BASE: programacao-2-projetos/projetos/src/Hotelaria/data/hospedes.txt
+    private final String arquivoHospedes = System.getProperty("user.dir")
+            + File.separator + "Projetos"
+            + File.separator + "src"
+            + File.separator + "Hotelaria"
+            + File.separator + "data"
+            + File.separator + "hospedes.txt";
 
-    // Adicionar hóspede
-    public void adicionarHospede(Hospede hospede) {
-        hospedes.add(hospede);
-        System.out.println("Hóspede adicionado com sucesso!");
+    private final String arquivoId = System.getProperty("user.dir")
+            + File.separator + "Projetos"
+            + File.separator + "src"
+            + File.separator + "Hotelaria"
+            + File.separator + "data"
+            + File.separator + "idHospede.txt";
+
+    public HospedeService() {
+        inicializarArquivos();
     }
 
-    // Listar hóspedes
+    // GARANTE QUE OS ARQUIVOS EXISTAM
+    private void inicializarArquivos() {
+        try {
+            File dataDir = new File(arquivoHospedes).getParentFile();
+            if (!dataDir.exists()) dataDir.mkdirs();
+
+            File arqHospedes = new File(arquivoHospedes);
+            if (!arqHospedes.exists()) arqHospedes.createNewFile();
+
+            File arqId = new File(arquivoId);
+            if (!arqId.exists()) gravaId(0);
+
+        } catch (IOException e) {
+            System.out.println("Erro ao criar diretórios: " + e.getMessage());
+        }
+    }
+
+    // Lê o último ID salvo
+    private int lerId() {
+        try (BufferedReader br = new BufferedReader(new FileReader(arquivoId))) {
+            return Integer.parseInt(br.readLine());
+        } catch (Exception e) {
+            return 0;
+        }
+    }
+
+    // GRAVA O NOVO ID
+    private void gravaId(int id) {
+        try (PrintWriter pw = new PrintWriter(new FileWriter(arquivoId))) {
+            pw.println(id);
+        } catch (IOException e) {
+            System.out.println("Erro ao gravar ID: " + e.getMessage());
+        }
+    }
+
+    // CADASTRAR
+    public void cadastrarHospede() {
+        int id = lerId();
+
+        System.out.println("\n--- Cadastro de Hóspede ---");
+        String nome = Utils.lerString("Nome: ");
+        String cpf = Utils.lerString("CPF: ");
+        String rg = Utils.lerString("RG: ");
+        String celular = Utils.lerString("Celular: ");
+        String email = Utils.lerString("E-mail: ");
+
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(arquivoHospedes, true))) {
+            bw.write(id + ";" + nome + ";" + cpf + ";" + rg + ";" + celular + ";" + email);
+            bw.newLine();
+            System.out.println("\n✅ Hóspede cadastrado com sucesso!");
+            gravaId(id + 1);
+        } catch (IOException e) {
+            System.out.println("Erro ao gravar hóspede: " + e.getMessage());
+        }
+    }
+
+    // LISTAR TODOS
     public void listarHospedes() {
-        if (hospedes.isEmpty()) {
+        File f = new File(arquivoHospedes);
+
+        if (f.length() == 0) {
             System.out.println("Nenhum hóspede cadastrado.");
             return;
         }
-        System.out.println("\n--- Lista de Hóspedes ---");
-        for (Hospede h : hospedes) {
-            System.out.println(h.toString());
-        }
-    }
 
-    // Buscar hóspede por CPF
-    public Hospede buscarPorCpf(String cpf) {
-        for (Hospede h : hospedes) {
-            if (h.getCpf().equalsIgnoreCase(cpf)) {
-                return h;
-            }
-        }
-        return null; // se não encontrar
-    }
-
-    // Remover hóspede
-    public boolean removerHospede(String cpf) {
-        Hospede encontrado = buscarPorCpf(cpf);
-        if (encontrado != null) {
-            hospedes.remove(encontrado);
-            System.out.println("Hóspede removido com sucesso!");
-            return true;
-        } else {
-            System.out.println("Hóspede não encontrado.");
-            return false;
-        }
-    }
-
-    // Editar hóspede (atualizar dados)
-    public boolean editarHospede(String cpf, Hospede novosDados) {
-        Hospede existente = buscarPorCpf(cpf);
-        if (existente != null) {
-            existente.setNome(novosDados.getNome());
-            existente.setEmail(novosDados.getEmail());
-            existente.setCelular(novosDados.getCelular());
-            existente.setProfissao(novosDados.getProfissao());
-            existente.setGenero(novosDados.getGenero());
-            existente.setNacionalidade(novosDados.getNacionalidade());
-            System.out.println("Dados do hóspede atualizados com sucesso!");
-            return true;
-        } else {
-            System.out.println("Hóspede não encontrado.");
-            return false;
-        }
-    }
-
-    // Retornar lista completa (para outros serviços)
-    public List<Hospede> getHospedes() {
-        return hospedes;
-    }
-
-    // ---------------------- ARQUIVO ----------------------
-
-    public void salvarArquivo() {
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(arquivo))) {
-            for (Hospede h : hospedes) {
-                bw.write(h.getNome() + ";" + h.getCpf() + ";" + h.getRg() + ";" + h.getCelular() + ";" + h.getEmail());
-                bw.newLine();
-            }
-        } catch (IOException e) {
-            System.out.println("Erro ao salvar hóspedes: " + e.getMessage());
-        }
-    }
-
-    public void carregarArquivo() {
-        hospedes.clear();
-        File f = new File(arquivo);
-        if (!f.exists()) return;
-
-        try (BufferedReader br = new BufferedReader(new FileReader(arquivo))) {
+        try (BufferedReader br = new BufferedReader(new FileReader(f))) {
             String linha;
+            System.out.println("\n=== Lista de Hóspedes ===");
             while ((linha = br.readLine()) != null) {
                 String[] dados = linha.split(";");
-                if (dados.length >= 5) {
-                    Hospede h = new Hospede();
-                    h.setNome(dados[0]);
-                    h.setCpf(dados[1]);
-                    h.setRg(dados[2]);
-                    h.setCelular(dados[3]);
-                    h.setEmail(dados[4]);
-                    hospedes.add(h);
+                if (dados.length >= 6) {
+                    System.out.println("\nID: " + dados[0]);
+                    System.out.println("Nome: " + dados[1]);
+                    System.out.println("CPF: " + dados[2]);
+                    System.out.println("RG: " + dados[3]);
+                    System.out.println("Celular: " + dados[4]);
+                    System.out.println("Email: " + dados[5]);
                 }
             }
         } catch (IOException e) {
-            System.out.println("Erro ao carregar hóspedes: " + e.getMessage());
+            System.out.println("Erro ao ler hóspedes: " + e.getMessage());
         }
     }
 
+    // REMOVER HOSPEDE POR ID
+    public void removerHospede() {
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Digite o ID do hóspede para remover: ");
+        int idRemover = sc.nextInt();
+
+        File arquivo = new File(arquivoHospedes);
+        File temp = new File(arquivo.getParent(), "temp.txt");
+
+        boolean encontrado = false;
+
+        try (BufferedReader br = new BufferedReader(new FileReader(arquivo));
+             BufferedWriter bw = new BufferedWriter(new FileWriter(temp))) {
+
+            String linha;
+            while ((linha = br.readLine()) != null) {
+                String[] dados = linha.split(";");
+                int id = Integer.parseInt(dados[0]);
+                if (id != idRemover) {
+                    bw.write(linha);
+                    bw.newLine();
+                } else {
+                    encontrado = true;
+                }
+            }
+
+        } catch (IOException e) {
+            System.out.println("Erro ao remover hóspede: " + e.getMessage());
+        }
+
+        if (arquivo.delete() && temp.renameTo(arquivo)) {
+            if (encontrado)
+                System.out.println("Hóspede removido com sucesso!");
+            else
+                System.out.println("Hóspede não encontrado!");
+        }
+    }
+
+    // APAGAR TODOS
+    public void apagarTodos() {
+        File f = new File(arquivoHospedes);
+        if (f.exists()) {
+            try (PrintWriter pw = new PrintWriter(f)) {
+                pw.print(""); // limpa o conteúdo
+                gravaId(0);
+                System.out.println("🗑Todos os hóspedes foram apagados!");
+            } catch (IOException e) {
+                System.out.println("Erro ao apagar hóspedes: " + e.getMessage());
+            }
+        }
+    }
 }
