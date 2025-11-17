@@ -1,9 +1,8 @@
 package HotelariaFace.services;
 
-import Hotelaria.Utils;
-
 import java.io.*;
-import java.util.Scanner;
+import java.util.Scanner; // Permanece porque era usado na classe original (mas não é usado nos métodos agora)
+// import Hotelaria.Utils; // Removido, pois não é mais necessário
 
 public class HospedeService {
 
@@ -36,6 +35,8 @@ public class HospedeService {
             if (!arqHospedes.exists()) arqHospedes.createNewFile();
 
             File arqId = new File(arquivoId);
+            // Uso o gravaId(0) em vez de arqId.createNewFile() para garantir que o arquivo
+            // tenha um "0" inicial se for a primeira vez.
             if (!arqId.exists()) gravaId(0);
 
         } catch (IOException e) {
@@ -48,6 +49,7 @@ public class HospedeService {
         try (BufferedReader br = new BufferedReader(new FileReader(arquivoId))) {
             return Integer.parseInt(br.readLine());
         } catch (Exception e) {
+            // Em caso de erro (ex: arquivo vazio ou ID inválido), retorna 0
             return 0;
         }
     }
@@ -61,60 +63,57 @@ public class HospedeService {
         }
     }
 
-    // CADASTRAR
-    public void cadastrarHospede() {
+    // 🔧 1. NOVO CADASTRAR: Recebe todos os dados e não interage com o console.
+    public void cadastrarHospede(String nome, String cpf, String rg, String celular, String email) {
         int id = lerId();
-
-        System.out.println("\n--- Cadastro de Hóspede ---");
-        String nome = Utils.lerString("Nome: ");
-        String cpf = Utils.lerString("CPF: ");
-        String rg = Utils.lerString("RG: ");
-        String celular = Utils.lerString("Celular: ");
-        String email = Utils.lerString("E-mail: ");
 
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(arquivoHospedes, true))) {
             bw.write(id + ";" + nome + ";" + cpf + ";" + rg + ";" + celular + ";" + email);
             bw.newLine();
-            System.out.println("\nHóspede cadastrado com sucesso!");
             gravaId(id + 1);
         } catch (IOException e) {
+            // Mantendo o print APENAS em catch blocks para fins de log de erro
             System.out.println("Erro ao gravar hóspede: " + e.getMessage());
         }
     }
 
-    // LISTAR TODOS
-    public void listarHospedes() {
+
+    // 2. Método listarHospedes() removido (ou comentado/oculto)
+    // O método listarComoString() já está pronto para o Swing
+
+    // LISTAR TODOS COMO STRING (OK para Swing)
+    public String listarComoString() {
         File f = new File(arquivoHospedes);
 
         if (f.length() == 0) {
-            System.out.println("Nenhum hóspede cadastrado.");
-            return;
+            return "Nenhum hóspede cadastrado.";
         }
+
+        StringBuilder sb = new StringBuilder();
 
         try (BufferedReader br = new BufferedReader(new FileReader(f))) {
             String linha;
-            System.out.println("\n=== Lista de Hóspedes ===");
             while ((linha = br.readLine()) != null) {
                 String[] dados = linha.split(";");
+                // Adiciona uma verificação básica para evitar ArrayIndexOutOfBoundsException
                 if (dados.length >= 6) {
-                    System.out.println("\nID: " + dados[0]);
-                    System.out.println("Nome: " + dados[1]);
-                    System.out.println("CPF: " + dados[2]);
-                    System.out.println("RG: " + dados[3]);
-                    System.out.println("Celular: " + dados[4]);
-                    System.out.println("Email: " + dados[5]);
+                    sb.append("ID: ").append(dados[0]).append("\n");
+                    sb.append("Nome: ").append(dados[1]).append("\n");
+                    sb.append("CPF: ").append(dados[2]).append("\n");
+                    sb.append("RG: ").append(dados[3]).append("\n");
+                    sb.append("Celular: ").append(dados[4]).append("\n");
+                    sb.append("Email: ").append(dados[5]).append("\n\n");
                 }
             }
         } catch (IOException e) {
-            System.out.println("Erro ao ler hóspedes: " + e.getMessage());
+            // Retorna uma mensagem de erro em string para o GUI
+            return "Erro ao ler hóspedes.";
         }
+
+        return sb.toString();
     }
 
-    // REMOVER HOSPEDE POR ID
-    public void removerHospede() {
-        Scanner sc = new Scanner(System.in);
-        System.out.print("Digite o ID do hóspede para remover: ");
-        int idRemover = sc.nextInt();
+    public boolean removerHospede(int idRemover) {
 
         File arquivo = new File(arquivoHospedes);
         File temp = new File(arquivo.getParent(), "temp.txt");
@@ -127,8 +126,12 @@ public class HospedeService {
             String linha;
             while ((linha = br.readLine()) != null) {
                 String[] dados = linha.split(";");
-                int id = Integer.parseInt(dados[0]);
-                if (id != idRemover) {
+                // Adiciona uma verificação para evitar problemas com linhas mal-formatadas
+                if (dados.length < 1) continue;
+
+                int idLinha = Integer.parseInt(dados[0]);
+
+                if (idLinha != idRemover) {
                     bw.write(linha);
                     bw.newLine();
                 } else {
@@ -136,29 +139,37 @@ public class HospedeService {
                 }
             }
 
-        } catch (IOException e) {
+        } catch (IOException | NumberFormatException e) {
             System.out.println("Erro ao remover hóspede: " + e.getMessage());
+            // Se houver um erro de IO/formato, não prossegue com a troca de arquivos
+            return false;
         }
 
+        // Tenta remover o arquivo original e renomear o temporário
         if (arquivo.delete() && temp.renameTo(arquivo)) {
-            if (encontrado)
-                System.out.println("Hóspede removido com sucesso!");
-            else
-                System.out.println("Hóspede não encontrado!");
+            return encontrado; // Retorna true se encontrou e removeu, false se não encontrou
+        } else {
+            // Erro na operação de arquivo (delete ou rename)
+            System.out.println("Erro na operação de arquivo ao remover hóspede.");
+            // Tenta garantir que o arquivo temporário não permaneça se o rename falhar
+            temp.delete();
+            return false;
         }
     }
 
-    // APAGAR TODOS
-    public void apagarTodos() {
+    public boolean apagarTodos() {
         File f = new File(arquivoHospedes);
         if (f.exists()) {
             try (PrintWriter pw = new PrintWriter(f)) {
                 pw.print(""); // limpa o conteúdo
                 gravaId(0);
-                System.out.println("🗑Todos os hóspedes foram apagados!");
+                // System.out.println("🗑Todos os hóspedes foram apagados!"); // Removido
+                return true;
             } catch (IOException e) {
                 System.out.println("Erro ao apagar hóspedes: " + e.getMessage());
+                return false;
             }
         }
+        return false; // Retorna false se o arquivo nem existir
     }
 }
