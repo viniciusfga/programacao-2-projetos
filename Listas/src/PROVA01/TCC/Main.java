@@ -60,7 +60,8 @@ public class Main {
         System.out.println("1 - Cadastrar | Alterar | Excluir TCC");
         System.out.println("2 - Listar TCCs");
         System.out.println("3 - Estatísticas");
-        System.out.println("4 - Sair");
+        System.out.println("4 - Excluir TCC");
+        System.out.println("5 - Sair");
         System.out.print("Escolha: ");
     }
 
