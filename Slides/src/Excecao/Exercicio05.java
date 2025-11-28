@@ -2,7 +2,7 @@ package Excecao;
 
 import java.util.Scanner;
 
-public class Exercicio05_Treino {
+public class Exercicio05 {
     /*
 
     F( x ) = x³ + x²

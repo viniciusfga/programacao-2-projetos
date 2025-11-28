@@ -3,7 +3,6 @@ package Hotelaria.services;
 import java.io.*;
 import java.util.Scanner;
 
-import Hotelaria.models.Hospede;
 import Hotelaria.Utils;
 
 public class HospedeService {
@@ -44,7 +43,7 @@ public class HospedeService {
         }
     }
 
-    // Lê o último ID salvo
+    // LÊ O ÚLTIMO ID SALVO
     private int lerId() {
         try (BufferedReader br = new BufferedReader(new FileReader(arquivoId))) {
             return Integer.parseInt(br.readLine());

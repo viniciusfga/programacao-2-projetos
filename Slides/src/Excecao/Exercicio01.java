@@ -2,7 +2,7 @@ package Excecao;
 
 import java.util.Scanner;
 
-public class Exercicio01_Treino {
+public class Exercicio01 {
     public static void main(String[] args){
         Scanner input = new Scanner(System.in);
 

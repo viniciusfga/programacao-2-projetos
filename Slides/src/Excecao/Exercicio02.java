@@ -3,7 +3,7 @@ package Excecao;
 import java.text.Normalizer;
 import java.util.Scanner;
 
-public class Exercicio02_Treino {
+public class Exercicio02 {
 
     public static String normalizar(String s) {
         return Normalizer.normalize(s.trim().toLowerCase(), Normalizer.Form.NFD)

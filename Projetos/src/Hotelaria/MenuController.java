@@ -4,14 +4,14 @@ import Hotelaria.services.HospedeService;
 import Hotelaria.services.QuartoService;
 import Hotelaria.services.ReservaService;
 
-public class Gerenciar {
+public class MenuController {
 
     HospedeService hospede = new HospedeService();
     QuartoService quarto = new QuartoService();
     ReservaService reserva = new ReservaService();
 
     // GERENCIAR HOSPEDES
-    public void gerenciarHospedes() {
+    public void abrirMenuHospedes() {
         int escolha = Utils.lerInt("""
                 \n=== Gerenciar Hóspedes ===
                   1) Cadastrar hóspede
@@ -32,7 +32,7 @@ public class Gerenciar {
     }
 
     // GERENCIAR QUARTOS
-    public void gerenciarQuartos() {
+    public void abrirMenuQuartos() {
         int escolha = Utils.lerInt("""
                 \n=== Gerenciar Quartos ===
                   1) Cadastrar Quarto
@@ -53,7 +53,7 @@ public class Gerenciar {
     }
 
     // GERENCIAR RESERVAS
-    public void gerenciarReservas() {
+    public void abrirMenuReservas() {
         int escolha = Utils.lerInt("""
                 \n=== Gerenciar Reservas ===
                   1) Cadastrar Reserva

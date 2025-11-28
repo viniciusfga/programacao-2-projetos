@@ -5,7 +5,7 @@ import java.util.InputMismatchException;
 public class App {
     public static void main(String[] args) {
 
-        Gerenciar gerenciar = new Gerenciar();
+        MenuController menu = new MenuController();
 
         int opcao = 0;
         do {
@@ -19,16 +19,16 @@ public class App {
                 opcao = Utils.lerInt("Escolha uma opção: ");
 
                 switch (opcao) {
-                    case 1 -> gerenciar.gerenciarHospedes();
-                    case 2 -> gerenciar.gerenciarQuartos();
-                    case 3 -> gerenciar.gerenciarReservas();
+                    case 1 -> menu.abrirMenuHospedes(); // Sugiro renomear o método também
+                    case 2 -> menu.abrirMenuQuartos();
+                    case 3 -> menu.abrirMenuReservas();
                     case 4 -> System.out.println("\nEncerrando o sistema...");
                     default -> System.out.println("Opção inválida. Tente novamente.");
                 }
             } catch (InputMismatchException e) {
                 System.out.println("Erro: digite um número válido");
             }
-        } while (opcao != 2);
+        } while (opcao != 4);
 
     }
 }
