@@ -161,4 +161,91 @@ public class HospedeService {
             }
         }
     }
+
+    // BUSCAR HOSPEDE
+    public void buscarHospede() {
+        Scanner sc = new Scanner(System.in);
+
+        System.out.println("\n=== Buscar Hóspede ===");
+        System.out.println("1 - Buscar por ID");
+        System.out.println("2 - Buscar por Nome");
+        System.out.print("Escolha uma opção: ");
+
+        int opcao = sc.nextInt();
+        sc.nextLine(); // limpar buffer
+
+        File f = new File(arquivoHospedes);
+
+        if (f.length() == 0) {
+            System.out.println("Nenhum hóspede cadastrado.");
+            return;
+        }
+
+        boolean encontrado = false;
+
+        try (BufferedReader br = new BufferedReader(new FileReader(f))) {
+
+            String linha;
+
+            switch (opcao) {
+
+                // BUSCAR POR ID
+                case 1:
+                    System.out.print("Digite o ID: ");
+                    int idBuscar = sc.nextInt();
+                    sc.nextLine();
+
+                    while ((linha = br.readLine()) != null) {
+                        String[] dados = linha.split(";");
+
+                        if (Integer.parseInt(dados[0]) == idBuscar) {
+                            encontrado = true;
+                            System.out.println("\n--- Hóspede Encontrado ---");
+                            System.out.println("ID: " + dados[0]);
+                            System.out.println("Nome: " + dados[1]);
+                            System.out.println("CPF: " + dados[2]);
+                            System.out.println("RG: " + dados[3]);
+                            System.out.println("Celular: " + dados[4]);
+                            System.out.println("Email: " + dados[5]);
+                            break;
+                        }
+                    }
+                    break;
+
+                // BUSCAR POR NOME (parcial ou completo)
+                case 2:
+                    System.out.print("Digite o nome ou parte do nome: ");
+                    String nomeBuscar = sc.nextLine().toLowerCase();
+
+                    while ((linha = br.readLine()) != null) {
+                        String[] dados = linha.split(";");
+                        String nome = dados[1].toLowerCase();
+
+                        if (nome.contains(nomeBuscar)) {
+                            encontrado = true;
+                            System.out.println("\n--- Hóspede Encontrado ---");
+                            System.out.println("ID: " + dados[0]);
+                            System.out.println("Nome: " + dados[1]);
+                            System.out.println("CPF: " + dados[2]);
+                            System.out.println("RG: " + dados[3]);
+                            System.out.println("Celular: " + dados[4]);
+                            System.out.println("Email: " + dados[5]);
+                        }
+                    }
+                    break;
+
+                default:
+                    System.out.println("Opção inválida!");
+                    return;
+            }
+
+        } catch (IOException e) {
+            System.out.println("Erro ao buscar hóspede: " + e.getMessage());
+        }
+
+        if (!encontrado) {
+            System.out.println("Nenhum hóspede encontrado!");
+        }
+
+    }
 }

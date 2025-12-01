@@ -72,5 +72,25 @@ public class MenuController {
             default -> System.out.println("Opção inválida!");
         }
     }
+
+    // MENU LOCALIZAR
+    public void abrirMenuLocalizar() {
+        int escolha = Utils.lerInt("""
+                \n=== Menu de Busca ===
+                  1) Hóspede
+                  2) Quarto
+                  3) Reserva
+                  4) Sair
+                  Escolha: """);
+
+        switch (escolha) {
+            case 1 -> hospede.buscarHospede();
+            case 2 -> quarto.buscarQuarto();
+            case 3 -> reserva.buscarReserva();
+            case 4 -> System.out.println("Saindo...");
+            default -> System.out.println("Opção inválida!");
+        }
+    }
+
 }
 
