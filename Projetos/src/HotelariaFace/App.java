@@ -1,6 +1,6 @@
 package HotelariaFace;
 
-import Hotelaria.Gerenciar;
+import HotelariaFace.Gerenciar;
 import Hotelaria.Utils;
 
 import java.util.InputMismatchException;
@@ -8,7 +8,7 @@ import java.util.InputMismatchException;
 public class App {
     public static void main(String[] args) {
 
-        Hotelaria.Gerenciar gerenciar = new Gerenciar();
+        Gerenciar gerenciar = new Gerenciar();
 
         int opcao = 0;
         do {

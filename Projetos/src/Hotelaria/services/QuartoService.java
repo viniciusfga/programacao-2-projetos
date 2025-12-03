@@ -148,4 +148,66 @@ public class QuartoService {
             }
         }
     }
+
+    // BUSCAR HOSPEDE
+    public void buscarQuarto() {
+        Scanner sc = new Scanner(System.in);
+
+        System.out.println("\n=== Buscar Quarto ===");
+        System.out.println("1 - Buscar por Número");
+        System.out.print("Escolha uma opção: ");
+
+        int opcao = sc.nextInt();
+        sc.nextLine(); // limpar buffer
+
+        File f = new File(arquivoQuartos);
+
+        if (f.length() == 0) {
+            System.out.println("Nenhum quarto cadastrado.");
+            return;
+        }
+
+        boolean encontrado = false;
+
+        try (BufferedReader br = new BufferedReader(new FileReader(f))) {
+
+            String linha;
+
+            switch (opcao) {
+
+                // 🔍 BUSCAR POR NÚMERO DO QUARTO
+                case 1:
+                    System.out.print("Digite o número do quarto: ");
+                    int numeroBuscar = sc.nextInt();
+                    sc.nextLine();
+
+                    while ((linha = br.readLine()) != null) {
+                        String[] dados = linha.split(";");
+
+                        if (Integer.parseInt(dados[0]) == numeroBuscar) {
+                            encontrado = true;
+
+                            System.out.println("\n--- Quarto Encontrado ---");
+                            System.out.println("Número: " + dados[0]);
+                            System.out.println("Tipo: " + dados[1]);
+                            System.out.println("Valor diária: R$ " + dados[2]);
+                            System.out.println("Disponível: " + dados[3]);
+                            break;
+                        }
+                    }
+                    break;
+
+                default:
+                    System.out.println("Opção inválida!");
+                    return;
+            }
+
+        } catch (IOException e) {
+            System.out.println("Erro ao buscar quarto: " + e.getMessage());
+        }
+
+        if (!encontrado) {
+            System.out.println("\n⚠ Nenhum quarto encontrado!");
+        }
+    }
 }

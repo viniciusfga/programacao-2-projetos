@@ -113,7 +113,7 @@ public class ReservaService {
         }
     }
 
-    // Apagar todas as reservas
+    // APAGAR TODAS AS RESERVAS
     public void apagarTodas() {
         File f = new File(arquivoReservas);
         if (f.exists()) {
@@ -125,4 +125,46 @@ public class ReservaService {
             }
         }
     }
+
+    // BUSCAR RESERVA
+    public void buscarReserva() {
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Digite o CPF do hóspede para buscar: ");
+        String cpfBusca = sc.nextLine();
+
+        File arquivo = new File(arquivoReservas);
+
+        if (arquivo.length() == 0) {
+            System.out.println("Nenhuma reserva cadastrada.");
+            return;
+        }
+
+        boolean encontrado = false;
+
+        try (BufferedReader br = new BufferedReader(new FileReader(arquivo))) {
+            String linha;
+
+            while ((linha = br.readLine()) != null) {
+                String[] dados = linha.split(";");
+
+                if (dados[0].equalsIgnoreCase(cpfBusca)) {
+                    System.out.println("\n=== Reserva Encontrada ===");
+                    System.out.println("CPF do hóspede: " + dados[0]);
+                    System.out.println("Número do quarto: " + dados[1]);
+                    System.out.println("Data de entrada: " + dados[2]);
+                    System.out.println("Data de saída: " + dados[3]);
+                    System.out.println("Valor total: R$ " + dados[4]);
+                    encontrado = true;
+                }
+            }
+
+        } catch (IOException e) {
+            System.out.println("Erro ao buscar reserva: " + e.getMessage());
+        }
+
+        if (!encontrado) {
+            System.out.println("Nenhuma reserva encontrada para o CPF informado.");
+        }
+    }
+
 }
