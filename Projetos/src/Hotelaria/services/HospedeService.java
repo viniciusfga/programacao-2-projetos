@@ -1,13 +1,16 @@
 package Hotelaria.services;
 
+import Hotelaria.Utils;
+
 import java.io.*;
 import java.util.Scanner;
 
-import Hotelaria.Utils;
-
 public class HospedeService {
 
-    // CAMINHO BASE: programacao-2-projetos/projetos/src/Hotelaria/data/hospedes.txt
+    // SCANNER ÚNICO (evita vazamento)
+    private static final Scanner sc = new Scanner(System.in);
+
+    // CAMINHO BASE
     private final String arquivoHospedes = System.getProperty("user.dir")
             + File.separator + "Projetos"
             + File.separator + "src"
@@ -43,10 +46,14 @@ public class HospedeService {
         }
     }
 
-    // LÊ O ÚLTIMO ID SALVO
+    // LÊ O ÚLTIMO ID SALVO (BLINDADO)
     private int lerId() {
         try (BufferedReader br = new BufferedReader(new FileReader(arquivoId))) {
-            return Integer.parseInt(br.readLine());
+            String linha = br.readLine();
+            if (linha == null || linha.isEmpty()) {
+                return 0;
+            }
+            return Integer.parseInt(linha.trim());
         } catch (Exception e) {
             return 0;
         }
@@ -86,7 +93,7 @@ public class HospedeService {
     public void listarHospedes() {
         File f = new File(arquivoHospedes);
 
-        if (f.length() == 0) {
+        if (!f.exists() || f.length() == 0) {
             System.out.println("Nenhum hóspede cadastrado.");
             return;
         }
@@ -96,27 +103,34 @@ public class HospedeService {
             System.out.println("\n=== Lista de Hóspedes ===");
             while ((linha = br.readLine()) != null) {
                 String[] dados = linha.split(";");
-                if (dados.length >= 6) {
-                    System.out.println("\nID: " + dados[0]);
-                    System.out.println("Nome: " + dados[1]);
-                    System.out.println("CPF: " + dados[2]);
-                    System.out.println("RG: " + dados[3]);
-                    System.out.println("Celular: " + dados[4]);
-                    System.out.println("Email: " + dados[5]);
-                }
+
+                if (dados.length < 6) continue;
+
+                System.out.println("\nID: " + dados[0]);
+                System.out.println("Nome: " + dados[1]);
+                System.out.println("CPF: " + dados[2]);
+                System.out.println("RG: " + dados[3]);
+                System.out.println("Celular: " + dados[4]);
+                System.out.println("Email: " + dados[5]);
             }
         } catch (IOException e) {
             System.out.println("Erro ao ler hóspedes: " + e.getMessage());
         }
     }
 
-    // REMOVER HOSPEDE POR ID
+    // REMOVER HOSPEDE POR ID (BLINDADO)
     public void removerHospede() {
-        Scanner sc = new Scanner(System.in);
+        File arquivo = new File(arquivoHospedes);
+
+        if (!arquivo.exists() || arquivo.length() == 0) {
+            System.out.println("Nenhum hóspede cadastrado.");
+            return;
+        }
+
         System.out.print("Digite o ID do hóspede para remover: ");
         int idRemover = sc.nextInt();
+        sc.nextLine();
 
-        File arquivo = new File(arquivoHospedes);
         File temp = new File(arquivo.getParent(), "temp.txt");
 
         boolean encontrado = false;
@@ -127,7 +141,11 @@ public class HospedeService {
             String linha;
             while ((linha = br.readLine()) != null) {
                 String[] dados = linha.split(";");
+
+                if (dados.length < 6) continue;
+
                 int id = Integer.parseInt(dados[0]);
+
                 if (id != idRemover) {
                     bw.write(linha);
                     bw.newLine();
@@ -138,33 +156,47 @@ public class HospedeService {
 
         } catch (IOException e) {
             System.out.println("Erro ao remover hóspede: " + e.getMessage());
+            return;
         }
 
-        if (arquivo.delete() && temp.renameTo(arquivo)) {
-            if (encontrado)
-                System.out.println("Hóspede removido com sucesso!");
-            else
-                System.out.println("Hóspede não encontrado!");
+        if (arquivo.delete()) {
+            if (temp.renameTo(arquivo)) {
+                if (encontrado)
+                    System.out.println("Hóspede removido com sucesso!");
+                else
+                    System.out.println("Hóspede não encontrado!");
+            } else {
+                System.out.println("Erro ao restaurar arquivo!");
+            }
         }
     }
 
     // APAGAR TODOS
     public void apagarTodos() {
         File f = new File(arquivoHospedes);
-        if (f.exists()) {
-            try (PrintWriter pw = new PrintWriter(f)) {
-                pw.print(""); // limpa o conteúdo
-                gravaId(0);
-                System.out.println("🗑Todos os hóspedes foram apagados!");
-            } catch (IOException e) {
-                System.out.println("Erro ao apagar hóspedes: " + e.getMessage());
-            }
+
+        if (!f.exists()) {
+            System.out.println("Arquivo não encontrado.");
+            return;
+        }
+
+        try (PrintWriter pw = new PrintWriter(f)) {
+            pw.print("");
+            gravaId(0); // para projeto acadêmico
+            System.out.println("🗑 Todos os hóspedes foram apagados!");
+        } catch (IOException e) {
+            System.out.println("Erro ao apagar hóspedes: " + e.getMessage());
         }
     }
 
     // BUSCAR HOSPEDE
     public void buscarHospede() {
-        Scanner sc = new Scanner(System.in);
+        File f = new File(arquivoHospedes);
+
+        if (!f.exists() || f.length() == 0) {
+            System.out.println("Nenhum hóspede cadastrado.");
+            return;
+        }
 
         System.out.println("\n=== Buscar Hóspede ===");
         System.out.println("1 - Buscar por ID");
@@ -172,14 +204,7 @@ public class HospedeService {
         System.out.print("Escolha uma opção: ");
 
         int opcao = sc.nextInt();
-        sc.nextLine(); // limpar buffer
-
-        File f = new File(arquivoHospedes);
-
-        if (f.length() == 0) {
-            System.out.println("Nenhum hóspede cadastrado.");
-            return;
-        }
+        sc.nextLine();
 
         boolean encontrado = false;
 
@@ -189,7 +214,6 @@ public class HospedeService {
 
             switch (opcao) {
 
-                // BUSCAR POR ID
                 case 1:
                     System.out.print("Digite o ID: ");
                     int idBuscar = sc.nextInt();
@@ -198,38 +222,28 @@ public class HospedeService {
                     while ((linha = br.readLine()) != null) {
                         String[] dados = linha.split(";");
 
+                        if (dados.length < 6) continue;
+
                         if (Integer.parseInt(dados[0]) == idBuscar) {
                             encontrado = true;
-                            System.out.println("\n--- Hóspede Encontrado ---");
-                            System.out.println("ID: " + dados[0]);
-                            System.out.println("Nome: " + dados[1]);
-                            System.out.println("CPF: " + dados[2]);
-                            System.out.println("RG: " + dados[3]);
-                            System.out.println("Celular: " + dados[4]);
-                            System.out.println("Email: " + dados[5]);
+                            exibirHospede(dados);
                             break;
                         }
                     }
                     break;
 
-                // BUSCAR POR NOME (parcial ou completo)
                 case 2:
                     System.out.print("Digite o nome ou parte do nome: ");
                     String nomeBuscar = sc.nextLine().toLowerCase();
 
                     while ((linha = br.readLine()) != null) {
                         String[] dados = linha.split(";");
-                        String nome = dados[1].toLowerCase();
 
-                        if (nome.contains(nomeBuscar)) {
+                        if (dados.length < 6) continue;
+
+                        if (dados[1].toLowerCase().contains(nomeBuscar)) {
                             encontrado = true;
-                            System.out.println("\n--- Hóspede Encontrado ---");
-                            System.out.println("ID: " + dados[0]);
-                            System.out.println("Nome: " + dados[1]);
-                            System.out.println("CPF: " + dados[2]);
-                            System.out.println("RG: " + dados[3]);
-                            System.out.println("Celular: " + dados[4]);
-                            System.out.println("Email: " + dados[5]);
+                            exibirHospede(dados);
                         }
                     }
                     break;
@@ -246,6 +260,16 @@ public class HospedeService {
         if (!encontrado) {
             System.out.println("Nenhum hóspede encontrado!");
         }
+    }
 
+    // MÉTODO AUXILIAR DE EXIBIÇÃO
+    private void exibirHospede(String[] dados) {
+        System.out.println("\n--- Hóspede Encontrado ---");
+        System.out.println("ID: " + dados[0]);
+        System.out.println("Nome: " + dados[1]);
+        System.out.println("CPF: " + dados[2]);
+        System.out.println("RG: " + dados[3]);
+        System.out.println("Celular: " + dados[4]);
+        System.out.println("Email: " + dados[5]);
     }
 }
