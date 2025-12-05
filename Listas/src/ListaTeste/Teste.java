@@ -1,24 +1,49 @@
 package ListaTeste;
 
+import javax.xml.transform.Source;
+
 public class Teste {
 
     /*
-   3 - Desenvolva uma função recursiva para calcular a soma dos dígitos de um número inteiro.
+    INUMERO PRIMO
      */
-    public static boolean verify(String word, int begin, int end) {
-        if (word.length() <= 1) return true;
-        if(begin > end) return true;
+    public static int verify(int[] vetor, int indice) {
 
-        if (word.charAt(begin) != word.charAt(end - 1)) {
-            return false;
+        if(vetor.length == 0 || vetor == null){
+            throw new IllegalArgumentException("O vetor não pode estar vazio");
         }
 
-        return verify(word, begin + 1, end - 1);
+        if(indice == vetor.length - 1) return vetor[indice];
+
+        return vetor[indice] + verify(vetor, indice + 1);
     }
 
     public static void main(String[] args) {
 
-        System.out.println(verify("arara", 0, 5));
+        int[] vetor = {};
+        try {
+            int n = verify(vetor, 0);
+            System.out.println(n);
+        } catch (IllegalArgumentException m){
+            System.out.println("ERRO:" + m.getMessage());
+        }
+
+        hanoi(3,'A','C','B');
+    }
+
+    private static void hanoi(int n, char origem, char destino, char auxiliar) {
+        if(n == 1){
+            System.out.println(origem + " -> " + destino);
+            return;
+        }
+
+        hanoi(n - 1, origem, auxiliar, destino);
+
+        System.out.println(origem + " -> " + destino);
+
+        hanoi(n - 1, auxiliar, destino, origem);
 
     }
+
+
 }
