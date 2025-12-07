@@ -17,6 +17,7 @@ public class UsandoExcecoes {
         }
 
     }
+
     public static void method1() throws UserException {
         method2();
     }
@@ -34,6 +35,5 @@ class UserException extends Exception {
     public UserException() {
         super("This is a user defined exception. ");
     }
-
 }
 

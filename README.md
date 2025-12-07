@@ -4,7 +4,7 @@ Este repositório contém os materiais e exercícios do curso de **Programação
 
 - 📄 **Slides**: Apresentações teóricas do curso.
 - 📝 **Listas**: Listas de exercícios para prática.
-- 🎯 **Desafios**: Exercícios e problemas extras para aprofundamento.
+- 🎯 **Projetos**: Projetos finais da disciplina.
 
 ---
 
