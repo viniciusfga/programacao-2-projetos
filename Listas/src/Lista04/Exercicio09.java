@@ -1,7 +1,5 @@
 package Lista04;
 
-import javax.print.DocFlavor;
-
 public class Exercicio09 {
 
     public static int somaElementos(int[] vetor, int indice) {
