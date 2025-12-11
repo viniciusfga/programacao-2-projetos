@@ -1,14 +1,23 @@
 package Hotelaria.models;
 
-import HotelariaPOO.models.Hospede;
-import HotelariaPOO.models.Quarto;
-
 public class Reserva {
 
-    private Hospede hospede;
-    private Quarto quarto;
-    private String dataEntrada;
-    private String dataSaida;
-    private double valorTotal;
+    public final String cpfHospede;
+    public final int numeroQuarto;
+    public final String dataEntrada;
+    public final String dataSaida;
+    public final double valorTotal;
 
+    public Reserva(String cpfHospede, int numeroQuarto, String dataEntrada, String dataSaida, double valorTotal) {
+        this.cpfHospede = cpfHospede;
+        this.numeroQuarto = numeroQuarto;
+        this.dataEntrada = dataEntrada;
+        this.dataSaida = dataSaida;
+        this.valorTotal = valorTotal;
+    }
+
+    @Override
+    public String toString() {
+        return cpfHospede + ";" + numeroQuarto + ";" + dataEntrada + ";" + dataSaida + ";" + valorTotal;
+    }
 }

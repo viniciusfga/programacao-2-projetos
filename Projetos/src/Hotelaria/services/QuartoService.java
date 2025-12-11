@@ -1,8 +1,9 @@
 package Hotelaria.services;
 
-import java.io.*;
-import java.util.Scanner;
 import Hotelaria.Utils;
+import Hotelaria.models.Quarto;
+
+import java.io.*;
 
 public class QuartoService {
 
@@ -56,16 +57,33 @@ public class QuartoService {
         }
     }
 
+    // Auxiliar: transforma linha em objeto Quarto
+    private Quarto linhaParaQuarto(String linha) {
+        String[] d = linha.split(";");
+        return new Quarto(
+                Integer.parseInt(d[0]),
+                d[1],
+                Double.parseDouble(d[2]),
+                Boolean.parseBoolean(d[3])
+        );
+    }
+
+    // Auxiliar: transforma objeto Quarto em linha
+    private String quartoParaLinha(Quarto q) {
+        return q.numero + ";" + q.tipo + ";" + q.valorDiaria + ";" + q.disponivel;
+    }
+
     public void cadastrarQuarto() {
         int numero = lerId();
 
         System.out.println("\n--- Cadastro de Quarto ---");
         String tipo = Utils.lerString("Tipo (Simples / Duplo / Luxo): ");
         double valor = Utils.lerDouble("Valor da diária: ");
-        boolean disponivel = true;
+
+        Quarto q = new Quarto(numero, tipo, valor, true);
 
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(arquivoQuartos, true))) {
-            bw.write(numero + ";" + tipo + ";" + valor + ";" + disponivel);
+            bw.write(quartoParaLinha(q));
             bw.newLine();
             System.out.println("\nQuarto cadastrado com sucesso!");
             gravaId(numero + 1);
@@ -85,14 +103,14 @@ public class QuartoService {
         try (BufferedReader br = new BufferedReader(new FileReader(f))) {
             String linha;
             System.out.println("\n=== Lista de Quartos ===");
+
             while ((linha = br.readLine()) != null) {
-                String[] dados = linha.split(";");
-                if (dados.length >= 4) {
-                    System.out.println("\nNúmero: " + dados[0]);
-                    System.out.println("Tipo: " + dados[1]);
-                    System.out.println("Valor diária: R$ " + dados[2]);
-                    System.out.println("Disponível: " + dados[3]);
-                }
+                Quarto q = linhaParaQuarto(linha);
+
+                System.out.println("\nNúmero: " + q.numero);
+                System.out.println("Tipo: " + q.tipo);
+                System.out.println("Valor diária: R$ " + q.valorDiaria);
+                System.out.println("Disponível: " + q.disponivel);
             }
         } catch (IOException e) {
             System.out.println("Erro ao ler quartos: " + e.getMessage());
@@ -100,9 +118,7 @@ public class QuartoService {
     }
 
     public void removerQuarto() {
-        Scanner sc = new Scanner(System.in);
-        System.out.print("Digite o número do quarto para remover: ");
-        int numeroRemover = sc.nextInt();
+        int numeroRemover = Utils.lerInt("Digite o número do quarto para remover: ");
 
         File arquivo = new File(arquivoQuartos);
         File temp = new File(arquivo.getParent(), "temp.txt");
@@ -114,10 +130,10 @@ public class QuartoService {
 
             String linha;
             while ((linha = br.readLine()) != null) {
-                String[] dados = linha.split(";");
-                int numero = Integer.parseInt(dados[0]);
-                if (numero != numeroRemover) {
-                    bw.write(linha);
+                Quarto q = linhaParaQuarto(linha);
+
+                if (q.numero != numeroRemover) {
+                    bw.write(quartoParaLinha(q));
                     bw.newLine();
                 } else {
                     encontrado = true;
@@ -132,7 +148,7 @@ public class QuartoService {
             if (encontrado)
                 System.out.println("Quarto removido com sucesso!");
             else
-                System.out.println("⚠Quarto não encontrado!");
+                System.out.println("Quarto não encontrado!");
         }
     }
 
@@ -149,17 +165,7 @@ public class QuartoService {
         }
     }
 
-    // BUSCAR HOSPEDE
     public void buscarQuarto() {
-        Scanner sc = new Scanner(System.in);
-
-        System.out.println("\n=== Buscar Quarto ===");
-        System.out.println("1 - Buscar por Número");
-        System.out.print("Escolha uma opção: ");
-
-        int opcao = sc.nextInt();
-        sc.nextLine(); // limpar buffer
-
         File f = new File(arquivoQuartos);
 
         if (f.length() == 0) {
@@ -167,39 +173,27 @@ public class QuartoService {
             return;
         }
 
+        System.out.println("\n=== Buscar Quarto ===");
+        int numeroBuscar = Utils.lerInt("Número do quarto: ");
+
         boolean encontrado = false;
 
         try (BufferedReader br = new BufferedReader(new FileReader(f))) {
-
             String linha;
 
-            switch (opcao) {
+            while ((linha = br.readLine()) != null) {
+                Quarto q = linhaParaQuarto(linha);
 
-                // 🔍 BUSCAR POR NÚMERO DO QUARTO
-                case 1:
-                    System.out.print("Digite o número do quarto: ");
-                    int numeroBuscar = sc.nextInt();
-                    sc.nextLine();
+                if (q.numero == numeroBuscar) {
+                    encontrado = true;
 
-                    while ((linha = br.readLine()) != null) {
-                        String[] dados = linha.split(";");
-
-                        if (Integer.parseInt(dados[0]) == numeroBuscar) {
-                            encontrado = true;
-
-                            System.out.println("\n--- Quarto Encontrado ---");
-                            System.out.println("Número: " + dados[0]);
-                            System.out.println("Tipo: " + dados[1]);
-                            System.out.println("Valor diária: R$ " + dados[2]);
-                            System.out.println("Disponível: " + dados[3]);
-                            break;
-                        }
-                    }
+                    System.out.println("\n--- Quarto Encontrado ---");
+                    System.out.println("Número: " + q.numero);
+                    System.out.println("Tipo: " + q.tipo);
+                    System.out.println("Valor diária: R$ " + q.valorDiaria);
+                    System.out.println("Disponível: " + q.disponivel);
                     break;
-
-                default:
-                    System.out.println("Opção inválida!");
-                    return;
+                }
             }
 
         } catch (IOException e) {
@@ -207,7 +201,7 @@ public class QuartoService {
         }
 
         if (!encontrado) {
-            System.out.println("\n⚠ Nenhum quarto encontrado!");
+            System.out.println("\nNenhum quarto encontrado!");
         }
     }
 }

@@ -7,4 +7,13 @@ public class Hospede {
     public String rg;
     public String celular;
     public String email;
+
+    public Hospede(int id, String nome, String cpf, String rg, String celular, String email) {
+        this.id = id;
+        this.nome = nome;
+        this.cpf = cpf;
+        this.rg = rg;
+        this.celular = celular;
+        this.email = email;
+    }
 }
