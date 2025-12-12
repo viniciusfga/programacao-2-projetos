@@ -18,6 +18,12 @@ public class Reserva {
 
     @Override
     public String toString() {
-        return cpfHospede + ";" + numeroQuarto + ";" + dataEntrada + ";" + dataSaida + ";" + valorTotal;
+        return "Reserva{" +
+                "cpf='" + cpfHospede + '\'' +
+                ", quarto=" + numeroQuarto +
+                ", entrada='" + dataEntrada + '\'' +
+                ", saída='" + dataSaida + '\'' +
+                ", valor=" + valorTotal +
+                '}';
     }
 }

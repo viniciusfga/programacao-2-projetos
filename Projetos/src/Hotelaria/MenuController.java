@@ -18,7 +18,8 @@ public class MenuController {
                   2) Listar hóspedes
                   3) Remover hóspede
                   4) Apagar todos
-                  5) Sair
+                  5) Atualizar Dados
+                  6) Sair
                   Escolha: """);
 
         switch (escolha) {
@@ -26,7 +27,8 @@ public class MenuController {
             case 2 -> hospede.listarHospedes();
             case 3 -> hospede.removerHospede();
             case 4 -> hospede.apagarTodos();
-            case 5 -> System.out.println("Saindo...");
+            case 5 -> hospede.atualizarHospede();
+            case 6 -> System.out.println("Saindo...");
             default -> System.out.println("Opção inválida!");
         }
     }
@@ -39,7 +41,9 @@ public class MenuController {
                   2) Listar Quartos
                   3) Remover Quarto
                   4) Apagar Todos
-                  5) Sair
+                  5) Buscar Por Nome
+                  6) Modificar
+                  7) Sair
                   Escolha: """);
 
         switch (escolha) {
@@ -47,7 +51,9 @@ public class MenuController {
             case 2 -> quarto.listarQuartos();
             case 3 -> quarto.removerQuarto();
             case 4 -> quarto.apagarTodos();
-            case 5 -> System.out.println("Saindo...");
+            case 5 -> quarto.buscarPorNumeroMenu();
+            case 6 -> quarto.atualizarQuartoMenu();
+            case 7 -> System.out.println("Saindo...");
             default -> System.out.println("Opção inválida!");
         }
     }

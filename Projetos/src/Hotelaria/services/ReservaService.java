@@ -15,14 +15,16 @@ public class ReservaService {
             + File.separator + "data"
             + File.separator + "reservas.txt";
 
+    private final QuartoService quartoService = new QuartoService();
+
     public ReservaService() {
         inicializarArquivo();
     }
 
     private void inicializarArquivo() {
         try {
-            File dataDir = new File(arquivoReservas).getParentFile();
-            if (!dataDir.exists()) dataDir.mkdirs();
+            File dir = new File(arquivoReservas).getParentFile();
+            if (!dir.exists()) dir.mkdirs();
 
             File arq = new File(arquivoReservas);
             if (!arq.exists()) arq.createNewFile();
@@ -31,21 +33,27 @@ public class ReservaService {
         }
     }
 
-    // CONVERTE UMA LINHA DO ARQUIVO EM UM OBJETO RESERVA
+    private String reservaParaLinha(Reserva r) {
+        return r.cpfHospede + ";" +
+                r.numeroQuarto + ";" +
+                r.dataEntrada + ";" +
+                r.dataSaida + ";" +
+                r.valorTotal;
+    }
+
     private Reserva parse(String linha) {
         String[] d = linha.split(";");
-        if (d.length < 5) return null;
+        if (d.length != 5) return null;
 
         return new Reserva(
-                d[0],                      // cpf
-                Integer.parseInt(d[1]),    // numeroQuarto
-                d[2],                      // entrada
-                d[3],                      // saída
-                Double.parseDouble(d[4])   // valor
+                d[0],
+                Integer.parseInt(d[1]),
+                d[2],
+                d[3],
+                Double.parseDouble(d[4])
         );
     }
 
-    // LÊ TODAS AS RESERVAS DO ARQUIVO
     private List<Reserva> carregarTodas() {
         List<Reserva> lista = new ArrayList<>();
         File arquivo = new File(arquivoReservas);
@@ -63,11 +71,10 @@ public class ReservaService {
         return lista;
     }
 
-    // SALVA TODAS AS RESERVAS NO ARQUIVO
     private void salvarTodas(List<Reserva> reservas) {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(arquivoReservas))) {
             for (Reserva r : reservas) {
-                bw.write(r.toString());
+                bw.write(reservaParaLinha(r));
                 bw.newLine();
             }
         } catch (IOException e) {
@@ -75,12 +82,23 @@ public class ReservaService {
         }
     }
 
-    // CRIAR RESERVA
     public void criarReserva() {
         System.out.println("\n--- Criar Reserva ---");
 
         String cpf = Utils.lerString("CPF do hóspede: ");
         int numero = Utils.lerInt("Número do quarto: ");
+
+        var quarto = quartoService.buscarPorNumero(numero);
+        if (quarto == null) {
+            System.out.println("Quarto não encontrado.");
+            return;
+        }
+
+        if (!quarto.disponivel) {
+            System.out.println("Este quarto está ocupado.");
+            return;
+        }
+
         String entrada = Utils.lerString("Data de entrada (dd/mm/aaaa): ");
         String saida = Utils.lerString("Data de saída (dd/mm/aaaa): ");
         double valor = Utils.lerDouble("Valor total da reserva: ");
@@ -88,17 +106,19 @@ public class ReservaService {
         Reserva r = new Reserva(cpf, numero, entrada, saida, valor);
 
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(arquivoReservas, true))) {
-            bw.write(r.toString());
+            bw.write(reservaParaLinha(r));
             bw.newLine();
         } catch (IOException e) {
             System.out.println("Erro ao salvar reserva: " + e.getMessage());
             return;
         }
 
-        System.out.println("Reserva cadastrada.");
+        quarto.disponivel = false;
+        quartoService.atualizarQuarto(quarto);
+
+        System.out.println("Reserva cadastrada e quarto atualizado como ocupado.");
     }
 
-    // LISTAR RESERVAS
     public void listarReservas() {
         List<Reserva> lista = carregarTodas();
 
@@ -117,25 +137,40 @@ public class ReservaService {
         }
     }
 
-    // CANCELAR RESERVA PELO CPF
+    // CANCELAR RESERVA E LIBERAR O QUARTO
     public void cancelarReserva() {
         String cpf = Utils.lerString("Digite o CPF para cancelar: ");
 
         List<Reserva> lista = carregarTodas();
         int antes = lista.size();
 
-        lista.removeIf(r -> r.cpfHospede.equalsIgnoreCase(cpf));
+        Reserva reservaRemovida = null;
 
-        if (lista.size() == antes) {
+        for (Reserva r : lista) {
+            if (r.cpfHospede.equalsIgnoreCase(cpf)) {
+                reservaRemovida = r;
+                break;
+            }
+        }
+
+        if (reservaRemovida == null) {
             System.out.println("Nenhuma reserva encontrada para este CPF.");
             return;
         }
 
+        lista.remove(reservaRemovida);
         salvarTodas(lista);
-        System.out.println("Reserva cancelada.");
+
+        // Liberar o quarto
+        var quarto = quartoService.buscarPorNumero(reservaRemovida.numeroQuarto);
+        if (quarto != null) {
+            quarto.disponivel = true;
+            quartoService.atualizarQuarto(quarto);
+        }
+
+        System.out.println("Reserva cancelada e quarto liberado.");
     }
 
-    // BUSCAR RESERVA PELO CPF
     public void buscarReserva() {
         String cpf = Utils.lerString("CPF para buscar: ");
 
@@ -159,7 +194,6 @@ public class ReservaService {
         }
     }
 
-    // APAGAR TODAS
     public void apagarTodas() {
         try (PrintWriter pw = new PrintWriter(arquivoReservas)) {
             pw.print("");

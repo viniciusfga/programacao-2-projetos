@@ -16,4 +16,6 @@ public class Hospede {
         this.celular = celular;
         this.email = email;
     }
+    
 }
+
